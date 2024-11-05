@@ -1,0 +1,139 @@
+---
+title: testing-apis
+---
+
+# Chapter 10: Testing APIs
+
+Welcome to Chapter 10 of API 101 for Junior Web Devs! In this chapter, we will explore the crucial topic of testing APIs. As web developers, ensuring the reliability and efficiency of our API integrations is paramount. By effectively testing API endpoints, you can catch bugs early, verify that APIs behave as expected, and provide a stable interface for your application.
+
+## Objectives
+By the end of this chapter, you will be able to:
+- Identify the key tools used for API testing.
+- Write unit tests for API calls in JavaScript.
+- Automate API testing using popular tools like Postman or Cypress.
+- Apply testing techniques to real-world scenarios.
+
+## Overview of API Testing Tools
+
+Before diving into testing practices, it's essential to familiarize yourself with tools that facilitate API testing. Here are some of the most common:
+
+- **Postman**: A versatile tool for testing API requests. It allows you to manually send HTTP requests and automate tests using scripts.
+- **Cypress**: An end-to-end testing framework primarily for web applications, capable of handling API testing in conjunction with UI testing.
+- **Jest**: A JavaScript testing framework that can be used to write unit tests for API calls directly from your code.
+
+### Practical Exercise: Exploring Postman
+1. **Download and Install Postman**: Visit the [Postman website](https://www.postman.com/) and download the latest version.
+2. **Create a Collection**: Start a new collection for organizing your API requests.
+3. **Send a Test Request**: Select a public API (e.g., [JSONPlaceholder](https://jsonplaceholder.typicode.com/)) and issue a GET request to '/posts'.
+4. **Automate a Test**: Write a basic test script in the ‘Tests’ tab to check for a 200 status code:
+
+```javascript
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+```
+
+## Writing Unit Tests for API Calls in JavaScript
+
+Unit tests allow you to verify that small, isolated parts of your application behave as expected. Let's see how to write a unit test for an API call using Jest.
+
+### Setting Up Jest
+
+First, ensure you have Jest installed in your project. If not, install it using npm:
+
+```bash
+npm install --save-dev jest
+```
+
+### Writing Your First Test
+
+Suppose you have a function `fetchData` that makes an API call. Here's how you can test it:
+
+```javascript
+// api.js
+export async function fetchData(url) {
+    const response = await fetch(url);
+    return response.json();
+}
+```
+
+Create a test file named `api.test.js`:
+
+```javascript
+// api.test.js
+import { fetchData } from './api';
+
+jest.mock('./api');
+
+test('fetchData returns data from API', async () => {
+    const fakeData = [{ id: 1, title: 'Post 1' }];
+    fetchData.mockResolvedValue(fakeData);
+
+    const data = await fetchData('https://jsonplaceholder.typicode.com/posts');
+    expect(data).toEqual(fakeData);
+});
+```
+
+### Practical Exercise: Write a Unit Test
+- Modify the `fetchData` function to handle different endpoints.
+- Write unit tests for GET, POST, and error handling in API calls.
+
+## Automating API Testing with Postman or Cypress
+
+Automation reduces the manual effort in testing and helps catch errors sooner.
+
+### Automating Tests in Postman
+
+1. **Create an Environment**: Set up variables for dynamic values like API keys or user IDs.
+2. **Use Postman Newman**: Install [Newman](https://www.npmjs.com/package/newman) to run tests from the command line.
+
+```bash
+npm install -g newman
+newman run your_collection.json
+```
+
+### Automating Tests with Cypress
+
+Cypress can be used for both unit and integration testing:
+
+1. **Install Cypress**:
+
+```bash
+npm install cypress --save-dev
+```
+
+2. **Write a Cypress Test**:
+
+```javascript
+// cypress/integration/api_spec.js
+describe('API Tests', () => {
+    it('GET /posts', () => {
+        cy.request('https://jsonplaceholder.typicode.com/posts')
+          .its('status')
+          .should('equal', 200);
+    });
+});
+```
+
+Run Cypress to execute tests:
+
+```bash
+npx cypress open
+```
+
+## Real-World Testing Scenarios
+
+Real-world applications often require complex testing scenarios, such as:
+- **Authentication Flows**: Testing APIs that require login before accessing endpoints.
+- **Data Consistency**: Ensuring data returned by an API matches expected schemas.
+- **Performance Testing**: Simulating high load to test API response times and behavior under stress.
+
+### Exercise: Testing an Authenticated API
+1. Find an API that requires authentication (e.g., personal GitHub API).
+2. Use Postman to create a test workflow that includes logging in, accessing endpoints, and validating the response data.
+
+## Chapter Summary
+
+In this chapter, we delved into the testing of APIs—a fundamental practice in web development to ensure applications function correctly and reliably. We explored various tools such as Postman, Jest, and Cypress to facilitate API testing. By writing unit tests, automating tests, and understanding real-world scenarios, you are now better equipped to handle API testing in your projects. Continue practicing by creating comprehensive test suites for the APIs you work with, enhancing your skills and the robustness of your applications.
+
+With these tools and strategies, you're now ready to build stable and reliable web applications leveraging APIs to their full potential.

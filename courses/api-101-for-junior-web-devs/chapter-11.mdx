@@ -1,0 +1,118 @@
+---
+title: deploying-an-api-driven-application
+---
+
+# Chapter 11: Deploying an API-Driven Application
+
+Welcome to Chapter 11 of our "API 101 for Junior Web Devs" course. In this chapter, we'll focus on the final phase of developing an API-driven application—deployment. Deploying your application is a critical step in ensuring that your application is accessible to users around the world. We'll explore deployment strategies, configure essential environment variables, and discuss managing API versions in production environments. Let's dive in!
+
+## Overview of Deployment Strategies
+
+Different deployment strategies help optimize the application release process, ensuring minimal downtime and efficient updates. Selecting the right strategy can depend on your application's requirements and architecture.
+
+### Continuous Deployment
+
+- **Continuous Deployment** automates the release of your application every time a change is made to the codebase, given all tests pass successfully.
+- Benefits include rapid iteration and quick release of new features.
+- Popular tools: Jenkins, GitLab CI/CD, CircleCI.
+
+### Blue-Green Deployment
+
+- **Blue-Green Deployment** involves maintaining two identical environments. Only one is live to the public while the other is idle but ready.
+- During updates, the idle environment is updated and tested. Once verified, traffic switches over.
+- This minimizes downtime and ensures a smooth transition.
+
+### Serverless Deployment
+
+- **Serverless Deployment** is perfect for microservices and small-scale applications. It abstracts server management, thus reducing overhead.
+- AWS Lambda, Azure Functions, and Google Cloud Functions support serverless computing.
+
+## Deploying React and Next.js Applications
+
+Deploying web applications built with React and Next.js involves static exports, hosting solutions, and utilizing platforms that optimize performance and distribution.
+
+### Popular Hosting Platforms
+
+- **Vercel**: Perfectly tailored for Next.js applications, offering seamless integration and deployment.
+- **Netlify**: Optimized for Continuous Deployment, ideal for static applications or serverless functions.
+- **AWS Amplify**: Great for full-stack serverless apps, providing automatic backend and frontend integration.
+
+### Deployment Steps for Next.js
+
+Here's a quick walkthrough to deploy a Next.js application using Vercel:
+
+```bash
+# 1. First, install Vercel CLI
+npm install -g vercel
+
+# 2. Authenticate using your Vercel account
+vercel login
+
+# 3. Navigate to your project directory
+cd your-nextjs-project
+
+# 4. Deploy!
+vercel
+
+# Vercel will guide you through the deployment setup.
+# Once complete, Vercel provides a live URL for your deployed application.
+```
+
+## Configuring Environment Variables for API Keys
+
+Handling sensitive information like API keys securely is crucial. Environment variables allow us to manage these credentials dynamically, without hardcoding them into our files.
+
+### Setting Environment Variables
+
+- Use `.env` files to define environment variables locally. These should be added to your `.gitignore` file to prevent them from being uploaded to version control.
+  
+Example `.env.local`:
+
+```plaintext
+API_KEY=your_api_key_here
+API_URL=https://api.example.com
+```
+
+### Accessing Environment Variables in Next.js
+
+Next.js offers built-in support to access environment variables. Prefix your variable names with `NEXT_PUBLIC_` to expose them to the browser context.
+
+```javascript
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiKey = process.env.API_KEY;
+
+// Ensure API_KEY is used server-side only to maintain security.
+```
+
+## Managing API Versions in Production
+
+Versioning is essential for maintaining backward compatibility and ensuring stability as APIs evolve.
+
+### Versioning Strategies
+
+- **URI Versioning**: Include the version number directly in the URL (e.g., `https://api.example.com/v1/users`).
+- **Header Versioning**: Clients specify the version in the request header.
+- **Content Negotiation**: Use media types for requesting a resource version.
+
+### Version Management Best Practices
+
+- Clearly document all changes between versions.
+- Maintain old versions as long as possible to give clients time to adapt.
+- Use semantic versioning to communicate changes effectively: MAJOR.MINOR.PATCH (e.g., 2.1.0).
+
+## Practical Exercises
+
+### Exercise 1: Deploy a Next.js Application
+
+- Use Vercel to deploy a simple Next.js application.
+- Set up environment variables for API keys.
+- Include a basic API call to retrieve and display data on your application.
+
+### Exercise 2: Version an API Endpoint
+
+- Practice versioning by updating one of your API endpoints.
+- Create a new version and document changes in your README file.
+
+## Chapter Summary
+
+In this chapter, you learned the essentials for deploying API-driven applications, focusing on deployment strategies, steps for deploying React and Next.js apps, managing environment variables, and API versioning in production. Deploying applications requires careful consideration of the hosting platform, secure handling of sensitive data, and planning for future-proof API structures. With these skills, you're now equipped to bring your web applications to the world!
