@@ -1,0 +1,158 @@
+---
+title: building-your-own-apis
+order: 7
+---
+
+# Building Your Own APIs
+
+Welcome to Chapter 7 of API 101 for Junior Web Devs. In this chapter, we’ll shift gears from interacting with existing APIs to building your own from scratch. This is a crucial skill for any web developer, enabling you to create scalable, maintainable web services. By the end of this chapter, you'll know how to set up a Node.js and Express project, create basic API endpoints, and effectively document and test your APIs. Let’s dive in!
+
+## Setting Up a Node.js and Express Project
+
+### Installing Node.js and Express
+
+Before we jump into creating APIs, you'll need to set up your development environment. Node.js and Express will be our primary tools.
+
+- **Node.js**: A JavaScript runtime built on Chrome's V8 JavaScript engine. It enables building scalable network applications swiftly.
+- **Express**: A minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
+
+#### Step-by-Step Setup:
+
+1. **Install Node.js**: Download and install Node.js from [nodejs.org](https://nodejs.org/).
+2. **Create a new project directory**:
+   ```bash
+   mkdir my-api-project
+   cd my-api-project
+   ```
+3. **Initialize npm**:
+   ```bash
+   npm init -y
+   ```
+   This creates a `package.json` file, essential for managing project dependencies.
+4. **Install Express**:
+   ```bash
+   npm install express
+   ```
+
+Your project is now set up with Express! You’re ready to start building your API.
+
+### Creating a Basic Express Server
+
+Let's create a simple Express server. This server will form the foundation of our API.
+
+```javascript
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
+});
+```
+
+- **Explanation**:
+  - We import Express and initialize an app instance.
+  - `app.get('/')`: Defines a GET endpoint at the root URL, responding with "Hello World!".
+  - `app.listen(port)`: Starts the server on port 3000 and logs an acknowledgment.
+
+Run your server with:
+```bash
+node server.js
+```
+Visit `http://localhost:3000` in your browser, and you should see "Hello World!".
+
+## Creating Basic API Endpoints
+
+With a basic server running, let’s expand it by adding more API endpoints.
+
+### Handling Different HTTP Methods
+
+RESTful APIs commonly use HTTP methods like GET, POST, PUT, and DELETE. We’ll implement these now.
+
+#### Creating a Simple API
+
+Let's create a basic API for managing a list of items. For simplicity, we'll store items in memory.
+
+```javascript
+let items = [];
+
+app.get('/items', (req, res) => {
+  res.json(items);
+});
+
+app.post('/items', (req, res) => {
+  const item = req.body;
+  items.push(item);
+  res.status(201).json(item);
+});
+```
+
+- **Explanation**:
+  - **GET /items**: Returns the list of items.
+  - **POST /items**: Adds a new item to the list. We assume that the request body contains the item.
+
+#### Adding Middleware for JSON Handling
+
+Express doesn’t handle JSON parsing automatically. Use middleware to process JSON:
+
+```javascript
+app.use(express.json());
+```
+
+## Documenting and Testing Your API
+
+Good documentation and testing are crucial for API usability and reliability. Let’s explore these aspects.
+
+### API Documentation with Swagger
+
+Swagger provides a user-friendly UI to document and test APIs.
+
+#### Setting Up Swagger
+
+1. **Install Swagger UI Express**:
+   ```bash
+   npm install swagger-ui-express
+   ```
+
+2. **Set up Swagger in your Express app**:
+
+   ```javascript
+   const swaggerUi = require('swagger-ui-express');
+   const swaggerDocument = require('./swagger.json');
+
+   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+   ```
+
+3. **Create a `swagger.json` file** with your API documentation.
+
+For simplicity, generate a basic layout using Swagger Editor online and export the JSON.
+
+### Basic API Testing with Postman
+
+Postman is a popular tool for API testing. Here’s how to test your API with it:
+
+1. **Install Postman** from [postman.com](https://www.postman.com/downloads/).
+2. **Create GET and POST requests**:
+   - **GET**: Enter your server URL (`http://localhost:3000/items`) and send a request to view items.
+   - **POST**: Add a payload with JSON format (`{"name": "Item1"}`), and send a request to add a new item.
+
+## Practical Exercises
+
+To solidify your understanding, complete the following exercises:
+
+1. **Extend the Items API**:
+   - Add a DELETE endpoint to remove an item by its ID.
+   - Implement error handling for cases like requesting a non-existent item.
+
+2. **Advanced Swagger Setup**:
+   - Create detailed Swagger documentation for your extended Items API. Include descriptions, parameters, and response messages.
+
+## Chapter Summary
+
+In this chapter, we've laid the groundwork for building your own APIs using Node.js and Express. We set up an Express server, created basic endpoints, and integrated JSON parsing. Additionally, we delved into documenting APIs using Swagger and testing them with Postman. Practice these concepts to ensure a strong grasp, as these skills form the backbone of developing robust web services. As you advance, remember: every great application begins with a well-constructed API!
+
+By mastering these techniques, you are not only ready to build and document APIs but also prepared to tackle real-world challenges in web development. Keep practicing, and you will soon create impressive, scalable applications!

@@ -1,0 +1,209 @@
+---
+title: real-world-api-projects
+order: 9
+---
+
+# Chapter 9: Real-World API Projects
+
+Welcome to the chapter that brings everything together! You're about to embark on creating a real-world web application powered by APIs. This chapter will guide you through planning, implementing, testing, and deploying a complete API-driven project. Ready to see how all the pieces fit together? Let's dive in!
+
+## Introduction to the Chapter's Topic
+
+In previous chapters, you've learned the fundamentals of APIs, explored asynchronous programming, and even built your own APIs. Now, you'll apply this knowledge in a practical project that mimics real-world scenarios you'll encounter as a web developer. This experience will not only solidify your understanding but also provide you with a portfolio piece to showcase your skills.
+
+## Project Planning and Requirement Gathering
+
+### Understanding the Problem
+
+Before jumping into code, it's crucial to understand the problem you're solving. Here, we'll outline a basic project: **Building a Weather Dashboard** using a third-party weather API.
+
+#### Project Requirements
+
+- **User Interface (UI):** Design a responsive dashboard where users can search for weather conditions by city.
+- **API Use:** Utilize a public weather API to fetch current weather data and display it to the user.
+- **Features:**
+  - Search functionality for cities.
+  - Display of temperature, humidity, and weather conditions.
+  - Error messages for invalid requests.
+
+### Tools and Technology Stack
+
+For this project, we'll leverage:
+- **React** for building the UI.
+- **JavaScript** for handling data manipulation and interaction.
+- **TypeScript** for type safety and better development practices.
+- A public weather API, such as OpenWeatherMap.
+
+### Designing the Architecture
+
+Sketch out the key components:
+- **City Search Component:** For user input.
+- **Weather Display Component:** To show weather data.
+- **API Service:** To handle HTTP requests.
+
+## Implementing APIs in a Live Project
+
+### Setting Up the React Project
+
+Begin by setting up your React app with TypeScript. Use tools like Create React App to streamline the process.
+
+```bash
+npx create-react-app weather-dashboard --template typescript
+```
+
+### Creating Components
+
+#### City Search Component
+
+```tsx
+import React, { useState } from 'react';
+
+const CitySearch: React.FC<{ onSearch: (city: string) => void }> = ({ onSearch }) => {
+  const [city, setCity] = useState('');
+
+  const handleSearch = () => {
+    onSearch(city);
+    setCity('');
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        placeholder="Enter city"
+      />
+      <button onClick={handleSearch}>Search</button>
+    </div>
+  );
+};
+
+export default CitySearch;
+```
+
+#### Weather Display Component
+
+```tsx
+import React from 'react';
+
+interface WeatherProps {
+  temperature: number;
+  humidity: number;
+  conditions: string;
+}
+
+const WeatherDisplay: React.FC<WeatherProps> = ({ temperature, humidity, conditions }) => (
+  <div>
+    <h3>Weather Conditions</h3>
+    <p>Temperature: {temperature}°C</p>
+    <p>Humidity: {humidity}%</p>
+    <p>Conditions: {conditions}</p>
+  </div>
+);
+
+export default WeatherDisplay;
+```
+
+### Implementing API Calls
+
+Use an `ApiService` class to manage API interactions.
+
+```tsx
+import axios from 'axios';
+
+const API_KEY = 'your_api_key'; // Enter your OpenWeatherMap API key here
+const API_URL = 'https://api.openweathermap.org/data/2.5/weather';
+
+export class ApiService {
+  static async fetchWeather(city: string) {
+    try {
+      const response = await axios.get(API_URL, {
+        params: {
+          q: city,
+          appid: API_KEY,
+          units: 'metric',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Error fetching weather data');
+    }
+  }
+}
+```
+
+### Integrating Components and Logic
+
+In your main application component, manage state and handle API logic.
+
+```tsx
+import React, { useState } from 'react';
+import CitySearch from './CitySearch';
+import WeatherDisplay from './WeatherDisplay';
+import { ApiService } from './ApiService';
+
+const App: React.FC = () => {
+  const [weatherData, setWeatherData] = useState<any>(null);
+
+  const onSearch = async (city: string) => {
+    try {
+      const data = await ApiService.fetchWeather(city);
+      setWeatherData({
+        temperature: data.main.temp,
+        humidity: data.main.humidity,
+        conditions: data.weather[0].description,
+      });
+    } catch {
+      alert('City not found or API error');
+    }
+  };
+
+  return (
+    <div className="App">
+      <CitySearch onSearch={onSearch} />
+      {weatherData && <WeatherDisplay {...weatherData} />}
+    </div>
+  );
+};
+
+export default App;
+```
+
+## Testing and Deploying Your API-Driven Application
+
+### Testing the Application
+
+Ensure your application behaves correctly.
+
+- **Functional Testing:** Use tools like Jest to test individual functions and components.
+- **UI Testing:** Verify the user interface and user interactions.
+  
+```bash
+# Example command to run tests
+npm test
+```
+
+### Deploying Your Application
+
+Deploy your completed project. Options include:
+
+- **Vercel** (ideal for React and Next.js projects)
+- **Netlify**
+- **GitHub Pages**
+
+Follow their respective documentation for deployment steps.
+
+## Practical Exercises or Assignments
+
+1. **Extend the Weather Dashboard:**
+   - Add a feature to display a 5-day weather forecast.
+   - Implement a loading spinner for API requests.
+   
+2. **Create Your Own API:**
+   - Set up a simple Node.js API that collects user feedback.
+   - Integrate your own API with the React application.
+
+## Chapter Summary
+
+In this chapter, you've learned how to plan, implement, and deploy a real-world API project. By creating a Weather Dashboard, you practiced integrating third-party APIs, handling dynamic data in React, and utilizing TypeScript for better code management. With the completed project, you now have a practical example to showcase your skills in building modern, API-driven web applications. Keep practicing with different APIs and projects to continue honing your skills!

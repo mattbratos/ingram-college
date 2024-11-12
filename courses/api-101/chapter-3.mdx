@@ -1,0 +1,188 @@
+---
+title: interacting-with-restful-apis
+order: 3
+---
+
+# Chapter 3: Interacting with RESTful APIs
+
+Welcome to Chapter 3 of "API 101 for Junior Web Devs." In this chapter, we're diving into the nitty-gritty of interacting with RESTful APIs using JavaScript. This is a crucial skill for web developers, as APIs are the backbone of modern web applications. Get ready to roll up your sleeves and learn how to make HTTP requests, handle responses, and integrate APIs into your projects.
+
+## Objectives
+
+- Learn how to send HTTP requests and handle responses in JavaScript.
+- Understand the process of integrating APIs in web applications.
+
+---
+
+## Introduction
+
+APIs (Application Programming Interfaces) are the secret sauce that allows different software systems to communicate with one another. RESTful APIs, in particular, adhere to the principles of Representational State Transfer, making them versatile and scalable for web applications. This chapter will teach you how to send HTTP requests to RESTful APIs and handle the responses effectively. By the end, you'll know how to utilize the Fetch API in JavaScript to connect your web applications to any RESTful API.
+
+## Setting Up a Development Environment for API Calls
+
+Before making any API calls, you need a proper setup to make your development process smooth and effective.
+
+### Install Node.js and npm
+
+Ensure that Node.js and npm are installed on your machine. This setup will help manage dependencies and run your development server.
+
+- Visit [Node.js](https://nodejs.org/) to download and install the latest version.
+- Verify installation using the commands:
+
+  ```bash
+  node -v
+  npm -v
+  ```
+
+### Set Up a Simple HTML/JavaScript Project
+
+1. **Create a project directory:**
+
+   ```bash
+   mkdir api-project
+   cd api-project
+   ```
+
+2. **Initialize a package.json file:**
+
+   ```bash
+   npm init -y
+   ```
+
+3. **Create a basic HTML file (`index.html`):**
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>API 101</title>
+   </head>
+   <body>
+       <h1>Interacting with RESTful APIs</h1>
+       <script src="app.js"></script>
+   </body>
+   </html>
+   ```
+
+4. **Create a JavaScript file (`app.js`):**
+
+   We'll be using this file to handle our API interactions.
+
+## Using JavaScript Fetch API to Make Requests
+
+JavaScript provides the Fetch API, a modern and flexible way to make network requests. Let's see how it works.
+
+### Fetch API Basics
+
+The Fetch API is promise-based, which means it uses promises to handle asynchronous requests. Here's a basic syntax of a GET request using `fetch`:
+
+```javascript
+fetch('https://api.example.com/data')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+```
+
+- **`fetch`**: This function initiates a network request to the provided URL.
+- **`then(response => response.json())`**: The `response.json()` method parses the response body as JSON.
+- **`catch`**: This captures any errors that occur during the fetching process.
+
+### Making a GET Request
+
+Suppose you want to fetch a list of users from a sample API. Here's how you'd do it:
+
+```javascript
+fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(users => {
+        console.log(users);
+        // You could now display these users in your webpage
+    })
+    .catch(error => console.error('Fetch error:', error));
+```
+
+### Making a POST Request
+
+Sending data to an API requires a POST request. Here’s how you can send a new user object:
+
+```javascript
+fetch('https://jsonplaceholder.typicode.com/users', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        name: 'John Doe',
+        email: 'john.doe@example.com'
+    })
+})
+.then(response => response.json())
+.then(data => console.log('Created user:', data))
+.catch(error => console.error('Error:', error));
+```
+
+## Handling JSON Responses and Errors
+
+Handling responses accurately is key to robust API interactions.
+
+### Parsing JSON
+
+Most APIs send responses in JSON format. Ensure you parse it correctly with `response.json()`. Remember to check if the response was successful (e.g., HTTP status code 200) before parsing:
+
+```javascript
+fetch('https://api.example.com/data')
+    .then(response => {
+        if (response.status >= 200 && response.status < 300) {
+            return response.json();
+        } else {
+            throw new Error('HTTP Status: ' + response.status);
+        }
+    })
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+```
+
+### Error Handling
+
+Be prepared to handle both network errors and HTTP errors. Use `try...catch` blocks or `.catch()` to capture exceptions:
+
+```javascript
+fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
+        return response.json();
+    })
+    .then(data => console.log(data))
+    .catch(error => console.error('There was a problem with your fetch operation:', error));
+```
+
+## Practical Exercises
+
+Exercise 1: **Fetch and Display User Data**
+
+- Use the JSONPlaceholder API to fetch user data.
+- Display each user's name and email in the console.
+
+Exercise 2: **Create a New Post**
+
+- Use the JSONPlaceholder API to create a new post.
+- Send a POST request with a title and body field.
+- Log the response to confirm the creation.
+
+Exercise 3: **Handle Errors Gracefully**
+
+- Modify your fetch requests to handle network errors.
+- Test your error handling by providing an incorrect URL.
+
+## Chapter Summary
+
+In this chapter, you learned how to interact with RESTful APIs using JavaScript's Fetch API. We've covered setting up your development environment, making GET and POST requests, handling JSON responses, and robust error handling. These skills will be instrumental as you move forward in integrating APIs into more complex web applications. Keep practicing these exercises to solidify your understanding.
